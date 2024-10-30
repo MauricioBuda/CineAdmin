@@ -36,6 +36,7 @@ section{
   padding: 1vw;
   background-color: rgba(255, 255, 255, 0.8);
   margin: 1vw;
+  border: 1px solid rgba(0, 81, 255, 0.575);
 }
 
 .btn-vacantes:hover{
@@ -61,6 +62,9 @@ section{
         }
 
         .div-vacantes{
+          display: flex;
+          justify-content: center;
+          align-items: center;
           padding: 3vw;
         }
         

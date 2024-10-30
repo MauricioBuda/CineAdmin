@@ -40,6 +40,7 @@ const analytics = getAnalytics(app);
 
 
 let hayFuncion
+let vacantes
 
 
 
@@ -48,7 +49,6 @@ let hayFuncion
 // Función para saber cuantas vacantes quedan ↓
 async function cantidadVacantesDisponibles () {
     const dbRef = ref(getDatabase());
-    let vacantes
     await get(child(dbRef, `vacantes/vacantes`)).then((snapshot) => {
       if (snapshot.exists()) {
         vacantes = snapshot.val()
@@ -156,6 +156,42 @@ btnVacantes.addEventListener('click', confirmarActualizacionDeVacantes)
 
 
 function confirmarActualizacionDeVacantes () {
-    modificarVacantes(inputVacantes.value);
-    inputVacantes.value = '';
+  let vacantesIngresadas = inputVacantes.value;
+  if (vacantesIngresadas > 50 || vacantesIngresadas === '' ){
+      Swal.fire({
+        position: "center",
+        icon: "error",
+        title: "Las vacantes pueden ser entre 0 y 50",
+        showConfirmButton: false,
+        timer: 1800
+      });
+      return
+  } else if (vacantes === vacantesIngresadas){
+    Swal.fire({
+      position: "center",
+      icon: "error",
+      title: "Las vacantes ingresadas son iguales a las existentes",
+      showConfirmButton: false,
+      timer: 1800
+    });
+    return
+  } else {
+    Swal.fire({
+      title: `Vas a cambiar las vacantes existentes (${vacantes}) por ${vacantesIngresadas}`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, modificarlas',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        modificarVacantes(vacantesIngresadas);
+        vacantesIngresadas = '';
+        setTimeout(() => {
+          location.reload(true);
+        }, 2000);
+      }
+    });
+  }
 }
