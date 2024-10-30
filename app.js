@@ -165,6 +165,7 @@ function confirmarActualizacionDeVacantes () {
         showConfirmButton: false,
         timer: 1800
       });
+      vacantesIngresadas = '';
       return
   } else if (vacantes === vacantesIngresadas){
     Swal.fire({
@@ -174,6 +175,7 @@ function confirmarActualizacionDeVacantes () {
       showConfirmButton: false,
       timer: 1800
     });
+    vacantesIngresadas = '';
     return
   } else {
     Swal.fire({
@@ -190,7 +192,7 @@ function confirmarActualizacionDeVacantes () {
         vacantesIngresadas = '';
         setTimeout(() => {
           location.reload(true);
-        }, 2000);
+        }, 1800);
       }
     });
   }

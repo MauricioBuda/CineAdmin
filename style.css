@@ -18,23 +18,29 @@ section{
 }
 
 .input-vacantes{
+  text-align: center;
   width: 15vw;
   height: 8vh;
   font-size: 1rem;
   border: none;
   border-radius: 5%;
   padding: 1vw;
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: rgba(255, 255, 255, 0.5);
   margin: 1vw;
+}
+
+.input-vacantes::placeholder{
+  color: black;
 }
 
 .btn-vacantes{
   height: 8vh;
   font-size: 1vw;
+  font-weight: bold;
   border: none;
   border-radius: 5%;
   padding: 1vw;
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: rgba(255, 255, 255, 0.5);
   margin: 1vw;
   border: 1px solid rgba(0, 81, 255, 0.575);
 }
@@ -69,7 +75,6 @@ section{
         }
         
         .input-vacantes{
-          text-align: center;
           width: 45vw;
         }
 
