@@ -1,7 +1,71 @@
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
 section{
-  background-image: url(./public/Can.jpg);
+  background-image: url(./public/Canser.jpg);
   background-repeat: no-repeat;
-  background-size: contain;
+  background-size: cover;
   width: 100vw;
   height: 100vh;
 }
+
+.div-vacantes{
+  padding: 1vw;
+}
+
+.input-vacantes{
+  width: 15vw;
+  height: 8vh;
+  font-size: 1rem;
+  border: none;
+  border-radius: 5%;
+  padding: 1vw;
+  background-color: rgba(255, 255, 255, 0.8);
+  margin: 1vw;
+}
+
+.btn-vacantes{
+  height: 8vh;
+  font-size: 1vw;
+  border: none;
+  border-radius: 5%;
+  padding: 1vw;
+  background-color: rgba(255, 255, 255, 0.8);
+  margin: 1vw;
+}
+
+
+
+
+
+
+      /* MEDIA QUERYS ↓*/
+
+      @media screen and (max-width: 524px) {
+        section{
+          background-image: url(./public/Can.jpg);
+        }
+
+        .div-vacantes{
+          padding: 3vw;
+        }
+        
+        .input-vacantes{
+          text-align: center;
+          width: 45vw;
+        }
+
+        .input-vacantes::placeholder{
+          font-size: 2.5vw;
+        }
+        
+        .btn-vacantes{
+          font-size: 4vw;
+          width: 30vw;
+        }
+
+      }

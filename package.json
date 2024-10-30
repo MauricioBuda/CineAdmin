@@ -10,5 +10,9 @@
   },
   "devDependencies": {
     "vite": "^5.4.9"
+  },
+  "dependencies": {
+    "firebase": "^11.0.1",
+    "sweetalert2": "^11.14.4"
   }
 }

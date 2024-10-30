@@ -2,14 +2,41 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+            <!-- FAVICON -->
+            <link rel="apple-touch-icon" sizes="180x180" href="public/Config.png">
+            <link rel="icon" href="public/Config.png" type="logo_chico">
+            <link rel="shortcut icon" href="public/Config.png" type="image/x-icon">
+
+            
+
     <link rel="stylesheet" href="./style.css">
-    <title>Cine Admin</title>
+    <title> Cine Admin </title>
   </head>
   <body>
+
+
+
+
+
     <section>
 
+      <div class="div-vacantes">
+        <input required class="input-vacantes" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')" id="inputVacantes" placeholder="NUEVO NÚMERO DE VACANTES" type="text">
+        <button class="btn-vacantes" id="btnVacantes"> 
+          Actualizar 
+        </button>
+      </div>
+
     </section>
+
+
+
+
+
+    <script type="module" src="./app.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   </body>
 </html>
