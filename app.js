@@ -108,7 +108,7 @@ function modificarVacantes(vacantes) {
                 icon: "success",
                 title: "Vacantes actualizadas en página principal",
                 showConfirmButton: false,
-                timer: 1500
+                timer: 1800
               });
           })
           .catch((error) => {
@@ -156,5 +156,6 @@ btnVacantes.addEventListener('click', confirmarActualizacionDeVacantes)
 
 
 function confirmarActualizacionDeVacantes () {
-    modificarVacantes(inputVacantes.value)
+    modificarVacantes(inputVacantes.value);
+    inputVacantes.value = '';
 }

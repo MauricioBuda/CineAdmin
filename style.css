@@ -38,6 +38,16 @@ section{
   margin: 1vw;
 }
 
+.btn-vacantes:hover{
+  background-color: rgba(255, 206, 206, 0.8);
+  border: 1px solid red;
+}
+
+.btn-vacantes:focus{
+  background-color: rgba(216, 222, 253, 0.8);
+  border: 1px solid rgb(0, 81, 255);
+}
+
 
 
 
