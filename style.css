@@ -1,0 +1,7 @@
+section{
+  background-image: url(./public/Can.jpg);
+  background-repeat: no-repeat;
+  background-size: contain;
+  width: 100vw;
+  height: 100vh;
+}
