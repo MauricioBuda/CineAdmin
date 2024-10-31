@@ -41,7 +41,7 @@ const analytics = getAnalytics(app);
 
 let hayFuncion
 let vacantes
-
+let peliExistente
 
 
 
@@ -53,7 +53,6 @@ async function cantidadVacantesDisponibles () {
       if (snapshot.exists()) {
         vacantes = snapshot.val()
         // vacantesDisponibles.textContent = vacantes;
-        console.log(vacantes)
       } else {
         console.log("Error");
       }
@@ -74,16 +73,50 @@ async function hayONoHayFuncion () {
     await get(child(dbRef, `HayFuncion`)).then((snapshot) => {
       if (snapshot.exists()) {
         hayFuncion = snapshot.val()
-        console.log(hayFuncion)
       } else {
         console.log("Error");
       }
     }).catch((error) => {
       console.error(error);
     });
+    return hayFuncion;
   }
 
   hayONoHayFuncion()
+
+
+
+
+
+
+
+
+
+// Función para saber que pelicula hay ↓
+async function hayPeli () {
+  const dbRef = ref(getDatabase());
+  await get(child(dbRef, `Pelicula`)).then((snapshot) => {
+    if (snapshot.exists()) {
+      peliExistente = snapshot.val()
+    } else {
+      console.log("Error");
+    }
+  }).catch((error) => {
+    console.error(error);
+  });
+  return peliExistente
+}
+
+hayPeli();
+
+
+
+
+
+
+
+
+  
 
 
 
@@ -116,12 +149,94 @@ function modificarVacantes(vacantes) {
           });
       } else {
         console.log("No existe el valor de vacantes");
-        // set(vacantesRef, { vacantes: 2 }); // Inicializar en 2 si no existe
       }
     }).catch((error) => {
       console.error("Error al leer vacantes:", error);
     });
   }
+
+
+
+
+
+
+
+
+
+    // Función para modificar vacantes ↓
+function modificarPeliculaEnPagficial(peli) {
+  const db = getDatabase();
+  const vacantesRef = ref(db, 'Pelicula');
+
+  // Leer el valor actual de vacantes
+  get(vacantesRef).then((snapshot) => {
+    if (snapshot.exists()) {
+      // const vacantesActuales = snapshot.val().vacantes || 0; // Valor actual o 0 si no existe
+      const nuevoValor =  peli;
+
+      // Escribir el nuevo valor en la base de datos
+      set(vacantesRef, nuevoValor )
+        .then(() => {
+          console.log("Peli actualizada:", nuevoValor);
+          Swal.fire({
+              position: "center",
+              icon: "success",
+              title: "Película modificada en página principal",
+              showConfirmButton: false,
+              timer: 1800
+            });
+        })
+        .catch((error) => {
+          console.error("Error al actualizar peli:", error);
+        });
+    } else {
+      console.log("No existe el valor de peli");
+    }
+  }).catch((error) => {
+    console.error("Error al leer peli:", error);
+  });
+}
+
+
+
+
+
+
+
+
+
+    // Función para modificar función ↓
+function modificarFuncion(respuesta) {
+  const db = getDatabase();
+  const vacantesRef = ref(db, 'HayFuncion');
+
+  // Leer el valor actual de vacantes
+  get(vacantesRef).then((snapshot) => {
+    if (snapshot.exists()) {
+      const nuevoValor =  !respuesta; 
+
+      // Escribir el nuevo valor en la base de datos
+      set(vacantesRef, nuevoValor)
+        .then(() => {
+          console.log(`Próxima función ${nuevoValor? "habilitada" : "deshabilitada"}`, nuevoValor);
+          Swal.fire({
+              position: "center",
+              icon: `${nuevoValor? "success" : "warning"}`,
+              title: `Función ${nuevoValor? "habilitada" : "deshabilitada"}`,
+              showConfirmButton: false,
+              timer: 1800
+            });
+        })
+        .catch((error) => {
+          console.error("Error al actualizar funcion:", error);
+        });
+    } else {
+      console.log("Error");
+    }
+  }).catch((error) => {
+    console.error("Error al traer datos", error);
+  });
+}
 
 
 
@@ -144,8 +259,14 @@ function modificarVacantes(vacantes) {
 
 let inputVacantes = document.getElementById('inputVacantes');
 let btnVacantes = document.getElementById('btnVacantes');
+let inputPelicula = document.getElementById('inputPelicula')
+let btnPelicula = document.getElementById('btnPelicula');
+let btnHayFuncion = document.getElementById('hayFuncion')
 
-btnVacantes.addEventListener('click', confirmarActualizacionDeVacantes)
+btnVacantes.addEventListener('click', confirmarActualizacionDeVacantes);
+btnPelicula.addEventListener('click', actualizarPeliEnPaginaOficial);
+btnHayFuncion.addEventListener('click', confirmarSiHayONoFuncion);
+
 
 
 
@@ -196,4 +317,44 @@ function confirmarActualizacionDeVacantes () {
       }
     });
   }
+}
+
+
+
+
+
+async function actualizarPeliEnPaginaOficial() {
+  let peliculaNueva = inputPelicula.value;
+  Swal.fire({
+    title: `Vas a cambiar (${peliExistente}) por ${peliculaNueva}`,
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Si, modificarla',
+    cancelButtonText: 'Cancelar'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      modificarPeliculaEnPagficial(peliculaNueva);
+      setTimeout(() => {
+        location.reload(true);
+      }, 1800);
+      inputPelicula.value = '';
+    }
+  })
+}
+
+
+
+
+
+
+
+
+
+
+
+async function confirmarSiHayONoFuncion() {
+  let respuesta = await hayONoHayFuncion();
+  modificarFuncion(respuesta);
 }
