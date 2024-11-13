@@ -42,6 +42,7 @@ const analytics = getAnalytics(app);
 let hayFuncion
 let vacantes
 let peliExistente
+let linkExistente
 
 
 
@@ -108,6 +109,32 @@ async function hayPeli () {
 }
 
 hayPeli();
+
+
+
+
+
+
+
+
+
+// Función para saber que link hay ↓
+async function hayLink () {
+  const dbRef = ref(getDatabase());
+  await get(child(dbRef, `Trailer`)).then((snapshot) => {
+    if (snapshot.exists()) {
+      linkExistente = snapshot.val()
+      console.log(linkExistente)
+    } else {
+      console.log("Error");
+    }
+  }).catch((error) => {
+    console.error(error);
+  });
+  return peliExistente
+}
+
+hayLink();
 
 
 
@@ -246,6 +273,46 @@ function modificarFuncion(respuesta) {
 
 
 
+    // Función para modificar link ↓
+    function modificarLink(link) {
+      const db = getDatabase();
+      const vacantesRef = ref(db, 'Trailer');
+    
+      // Leer el valor actual de vacantes
+      get(vacantesRef).then((snapshot) => {
+        if (snapshot.exists()) {
+          const nuevoValor =  link; 
+    
+          // Escribir el nuevo valor en la base de datos
+          set(vacantesRef, nuevoValor)
+            .then(() => {
+              Swal.fire({
+                  position: "center",
+                  icon: 'success',
+                  title: `Link modificado. ¡Por las dudas probalo!`,
+                  showConfirmButton: false,
+                  timer: 1800
+                });
+            })
+            .catch((error) => {
+              console.error("Error al actualizar funcion:", error);
+            });
+        } else {
+          console.log("Error");
+        }
+      }).catch((error) => {
+        console.error("Error al traer datos", error);
+      });
+    }
+
+
+
+
+
+
+
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -259,12 +326,16 @@ function modificarFuncion(respuesta) {
 
 let inputVacantes = document.getElementById('inputVacantes');
 let btnVacantes = document.getElementById('btnVacantes');
-let inputPelicula = document.getElementById('inputPelicula')
+let inputPelicula = document.getElementById('inputPelicula');
 let btnPelicula = document.getElementById('btnPelicula');
-let btnHayFuncion = document.getElementById('hayFuncion')
+let inputTrailer = document.getElementById('inputTrailer');
+let btnTrailer = document.getElementById('btnTrailer');
+let btnHayFuncion = document.getElementById('hayFuncion');
+
 
 btnVacantes.addEventListener('click', confirmarActualizacionDeVacantes);
 btnPelicula.addEventListener('click', actualizarPeliEnPaginaOficial);
+btnTrailer.addEventListener('click', actualizarLinkEnPaginaOficial)
 btnHayFuncion.addEventListener('click', confirmarSiHayONoFuncion);
 
 
@@ -343,6 +414,36 @@ async function actualizarPeliEnPaginaOficial() {
     }
   })
 }
+
+
+
+
+
+
+
+
+
+async function actualizarLinkEnPaginaOficial() {
+  let linkNuevo = inputTrailer.value;
+  Swal.fire({
+    title: `Vas a cambiar (${linkExistente}) por ${linkNuevo}`,
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Si, modificarlo (acordate de poner http://..)',
+    cancelButtonText: 'Cancelar'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      modificarLink(linkNuevo);
+      setTimeout(() => {
+        location.reload(true);
+      }, 1800);
+      inputTrailer.value = '';
+    }
+  })
+}
+
 
 
 
