@@ -124,7 +124,6 @@ async function hayLink () {
   await get(child(dbRef, `Trailer`)).then((snapshot) => {
     if (snapshot.exists()) {
       linkExistente = snapshot.val()
-      console.log(linkExistente)
     } else {
       console.log("Error");
     }
@@ -289,9 +288,9 @@ function modificarFuncion(respuesta) {
               Swal.fire({
                   position: "center",
                   icon: 'success',
-                  title: `Link modificado. ¡Por las dudas probalo!`,
+                  title: `Modificado. ¡Por las dudas probalo!`,
                   showConfirmButton: false,
-                  timer: 1800
+                  timer: 2500
                 });
             })
             .catch((error) => {
@@ -330,12 +329,14 @@ let inputPelicula = document.getElementById('inputPelicula');
 let btnPelicula = document.getElementById('btnPelicula');
 let inputTrailer = document.getElementById('inputTrailer');
 let btnTrailer = document.getElementById('btnTrailer');
+let btnEliminarTrailer = document.getElementById('eliminarTrailer');
 let btnHayFuncion = document.getElementById('hayFuncion');
 
 
 btnVacantes.addEventListener('click', confirmarActualizacionDeVacantes);
 btnPelicula.addEventListener('click', actualizarPeliEnPaginaOficial);
-btnTrailer.addEventListener('click', actualizarLinkEnPaginaOficial)
+btnTrailer.addEventListener('click', actualizarLinkEnPaginaOficial);
+btnEliminarTrailer.addEventListener('click', eliminarTrailer);
 btnHayFuncion.addEventListener('click', confirmarSiHayONoFuncion);
 
 
@@ -397,7 +398,7 @@ function confirmarActualizacionDeVacantes () {
 async function actualizarPeliEnPaginaOficial() {
   let peliculaNueva = inputPelicula.value;
   Swal.fire({
-    title: `Vas a cambiar (${peliExistente}) por ${peliculaNueva}`,
+    title: `${peliculaNueva === ''? 'Vas a dejar la sección sin película' : `Vas a cambiar ${peliExistente} por ${peliculaNueva}`}`,
     icon: 'warning',
     showCancelButton: true,
     confirmButtonColor: '#3085d6',
@@ -425,21 +426,58 @@ async function actualizarPeliEnPaginaOficial() {
 
 async function actualizarLinkEnPaginaOficial() {
   let linkNuevo = inputTrailer.value;
+
+  if (linkNuevo === '' ){
+    Swal.fire({
+      position: "center",
+      icon: "error",
+      title: "Campo vacío, gil",
+      showConfirmButton: false,
+      timer: 1800
+    });
+    return
+} else {
+    Swal.fire({
+      title: `${linkExistente === ''? `Vas a agregar el link: ${linkNuevo}` :  `Vas a cambiar ${linkExistente} por ${linkNuevo}`}`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, modificarlo',
+      text: '(acordate de poner http://..)',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        modificarLink(linkNuevo);
+        setTimeout(() => {
+          location.reload(true);
+        }, 1800);
+        inputTrailer.value = '';
+      }
+    })
+ }
+}
+
+
+
+
+
+
+
+
+
+async function eliminarTrailer() {
   Swal.fire({
-    title: `Vas a cambiar (${linkExistente}) por ${linkNuevo}`,
+    title: `Vas a eliminar la sección de trailer`,
     icon: 'warning',
     showCancelButton: true,
     confirmButtonColor: '#3085d6',
     cancelButtonColor: '#d33',
-    confirmButtonText: 'Si, modificarlo (acordate de poner http://..)',
+    confirmButtonText: 'Si, eliminarla',
     cancelButtonText: 'Cancelar'
   }).then((result) => {
     if (result.isConfirmed) {
-      modificarLink(linkNuevo);
-      setTimeout(() => {
-        location.reload(true);
-      }, 1800);
-      inputTrailer.value = '';
+      modificarLink('');
     }
   })
 }
